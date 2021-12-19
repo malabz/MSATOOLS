@@ -66,3 +66,4 @@ if __name__ == '__main__':
     ids, sequences = readFasta(filePath)
     new = preprocess(sequences)
     createFasta(resultName, ids, sequences)
+    print("Finish!")
