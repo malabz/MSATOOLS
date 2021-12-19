@@ -3,6 +3,11 @@
 Used to calculate the SP value of the result of multiple sequence alignment.
 
 By default, pairs with the same nongap characters(match) receive one count, pairs with different nongap characters(mismatch) receive minus one, pairs with one gap(gap1) receive minus two, and pairs with two gaps(gap2) receive zero. **Support user-defined parameters.**
+
+The results:
+- SP score: the sum of pair score
+- Avg SP score: we divided the SP score by the pair number N * (N – 1) / 2, where N represents the number of sequences.
+- Scaled SP score: we divided the Avg SP score by the sequences length L.
 ## Usage
 ```bash
 python SP.py [-h] --input INPUT [--match MATCH] [--mismatch MISMATCH] [--gap1 GAP1] [--gap2 GAP2]
