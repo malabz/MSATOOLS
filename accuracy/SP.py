@@ -89,13 +89,14 @@ def evaluate(sequences, matchS, mismatchS, gap1S, gap2S):
     Return:
         sp score
     """
-
+    print("calculating", end="", flush=True)
     score_list = []
-    for i in range(len(sequences[0])):
+    for j in range(len(sequences[0])):
         curr_clm: dict = {'A': 0, 'C': 0, 'G': 0, 'T': 0, 'N': 0, '-': 0}
-        for j in range(len(sequences)):
+        for i in range(len(sequences)):
             curr_clm[sequences[i][j]] += 1
         score_list.append(score_of(curr_clm, matchS, mismatchS, gap1S, gap2S))
+        if (j + 1) % (len(sequences[0]) // 3) == 0: print('.', end="", flush=True)
     print("done")
     return sum(score_list)
 
