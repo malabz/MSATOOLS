@@ -7,7 +7,7 @@ Update Date:2021-12-19
 """
 import re
 import argparse
-from itertools import combinations
+
 
 def read_fasta(file_path):
     """
@@ -33,33 +33,47 @@ def read_fasta(file_path):
         sequences.append(curr.upper())
     return identifiers, sequences
 
+
 def preprocess(sequences):
     """
-    处理fasta序列中的非法字符（非字母用-代替）
+    处理fasta序列中的非法字符（非字母用N代替）
 
     :param sequences 待处理的序列列表
     :return: processed [] 处理后的序列列表
     """
     processed = []
     for i in sequences:
-        tmp = re.sub("[^A-Za-z]", "-", str(i))
+        tmp = re.sub("[^ACTGNactgn-]", "N", str(i))
         processed.append(tmp)
     return processed
 
-def elementCount(arr):
+
+def score_of(curr_clm: dict, matchS, mismatchS, gap1S, gap2S):
     """
-    利用字典结构统计列表中各个元素的含量
+    序列单列打分
 
     Args:
-        arr 待统计的列表
+        sequences  待打分的序列
+        matchS     match(碱基相同且非N)的得分
+        mismatchS  mismatch(碱基非空非N，但不相同)的得分
+        gap1S      gap比对碱基，N比对N，N比对碱基的得分
+        gap2S      gap比对gap，gap比对N的得分
 
     Return:
-        result
+        该列的sp score
     """
-    result = {}
-    for i in set(arr):
-        result[i] = arr.count(i)
-    return result
+    match = 0  # nongap==nongap
+    mismatch = 0  # nongap!=nongap
+    gap1 = 0  # gap-nongap
+    gap2 = 0  # gap-gap
+    A, C, G, T, N, dash = curr_clm['A'], curr_clm['C'], curr_clm['G'], curr_clm['T'], curr_clm['N'], curr_clm['-']
+    match = (A * (A - 1) + C * (C - 1) + G * (G - 1) + T * (T - 1)) // 2
+    mismatch = ((A + C) * (G + T)) + A * C + G * T
+    gap1 = (A + C + G + T + N) * dash
+    gap2 = (dash * (dash - 1) // 2) + ((N * (N - 1)) // 2) + (A + C + G + T) * N
+    score = (match * matchS) + (mismatch * mismatchS) + (gap1 * gap1S) + (gap2 * gap2S)
+    return score
+
 
 def evaluate(sequences, matchS, mismatchS, gap1S, gap2S):
     """
@@ -75,47 +89,16 @@ def evaluate(sequences, matchS, mismatchS, gap1S, gap2S):
     Return:
         sp score
     """
-    match = 0         # nongap==nongap
-    mismatch = 0      # nongap!=nongap
-    gap_1 = 0         # gap-nongap
-    gap_2 = 0         # gap-gap
-    for i in range(len(sequences[0])):
-        part = []
-        for k in range(len(sequences)):
-            seed = sequences[k][i]
-            part.append(seed)
-        countOfSeed = set(part)
-        if ("-" not in countOfSeed) and (len(countOfSeed) == 1 or (("N" in countOfSeed) and (len(countOfSeed) == 2))):
-            match += (len(sequences)*(len(sequences)-1))/2
-        elif ("-" in countOfSeed and len(countOfSeed) == 1):
-            gap_2 += (len(sequences)*(len(sequences)-1))/2
-        else:
-            tmpDict = elementCount(part)
-            kind = []
-            comGap = 0
-            for key in tmpDict.keys():
-                if key == '-':
-                    comGap = tmpDict[key]
-                else:
-                    kind.append(tmpDict[key])
-            gap_2 += (comGap*(comGap-1)/2)
-            gap_1 += (sum(kind) * comGap)
-            if len(kind) == 1:
-                for i in range(len(kind)):
-                    match += kind[i]*(kind[i]-1)/2
-            elif len(kind) == 2:
-                for i in range(len(kind)):
-                    match += kind[i]*(kind[i]-1)/2
-                mismatch += kind[0] * kind[1]
-            else:
-                for i in range(len(kind)):
-                    match += kind[i]*(kind[i]-1)/2
-                comKind = combinations(kind,2)
-                for i in comKind:
-                    mismatch += i[0] * i[1]
 
-    score = (match * matchS) + (mismatch * mismatchS) + (gap_1 * gap1S) + (gap_2 * gap2S)
-    return score
+    score_list = []
+    for i in range(len(sequences[0])):
+        curr_clm: dict = {'A': 0, 'C': 0, 'G': 0, 'T': 0, 'N': 0, '-': 0}
+        for j in range(len(sequences)):
+            curr_clm[sequences[i][j]] += 1
+        score_list.append(score_of(curr_clm, matchS, mismatchS, gap1S, gap2S))
+    print("done")
+    return sum(score_list)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -131,11 +114,16 @@ if __name__ == '__main__':
     mismatchScore = args.mismatch
     gap1Score = args.gap1
     gap2Score = args.gap2
+
     _, sequences = read_fasta(filepath)
+    print(str(len(sequences)) + " sequences found")
+    if len(sequences) <= 1: exit()
+
     processedSeq = preprocess(sequences)
-    sp = evaluate(processedSeq, matchScore, mismatchScore, gap1Score, gap2Score)     # pure sp
-    avgSp = sp/(len(sequences)*(len(sequences)-1)/2)                                 # avg sp
-    scaledSP = avgSp/len(sequences[0])                                               # scaled sp
+
+    sp = evaluate(processedSeq, matchScore, mismatchScore, gap1Score, gap2Score)  # pure sp
+    avgSp = sp / (len(sequences) * (len(sequences) - 1) // 2)  # avg sp
+    scaledSP = avgSp / len(sequences[0])  # scaled sp
     print("SP score: " + str(sp))
     print("Avg SP score: " + str(avgSp))
     print("Scaled SP score: " + str(scaledSP))

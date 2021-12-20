@@ -2,6 +2,7 @@
 
 Author:zhai1xiao
 Date:2021-12-19
+Update:2021-12-20
 
 """
 
@@ -35,14 +36,14 @@ def readFasta(file_path):
 
 def preprocess(sequences):
     """
-    处理fasta序列中的非法字符（非字母用-代替）
+    处理fasta序列中的非法字符（非字母用N代替）
 
     :param sequences 待处理的序列列表
     :return: processed [] 处理后的序列列表
     """
     processed = []
     for i in sequences:
-        tmp = re.sub("[^A-Za-z]", "-", str(i))
+        tmp = re.sub("[^ACTGNactgn-]", "N", str(i))
         processed.append(tmp)
     return processed
 
@@ -66,4 +67,3 @@ if __name__ == '__main__':
     ids, sequences = readFasta(filePath)
     new = preprocess(sequences)
     createFasta(resultName, ids, sequences)
-    print("Finish!")
