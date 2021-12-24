@@ -2,7 +2,7 @@
 ## Introduction
 Used to calculate the SP value of the result of multiple sequence alignment.
 
-The script automatically handles illegal characters (characters other than ATCG-) in the file. The solution is to replace illegal characters with "N". **It could only be used to nucleotide sequences.**
+The script automatically replaces the base "U" with "T" in the RNA sequence files and handles illegal characters (characters other than ATCG-) in the file. The solution is to replace illegal characters with "N". **It could only be used to nucleotide sequences.**
 
 By default, pairs with the same nongap characters(match) receive one count, pairs with different nongap characters(mismatch) receive minus one, pairs with one gap(gap1) receive minus two, and pairs with two gaps or consisting of an N and a character(ACTGN) receive zero. **Support user-defined parameters.**
 

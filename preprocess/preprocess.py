@@ -43,7 +43,7 @@ def preprocess(sequences):
     """
     processed = []
     for i in sequences:
-        tmp = re.sub("[^ACTGNactgn-]", "N", str(i))
+        tmp = re.sub("[^ACTGNactgn-]", "N", str(i).replace('U', 'T'))
         processed.append(tmp)
     return processed
 

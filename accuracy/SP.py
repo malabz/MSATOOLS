@@ -43,10 +43,9 @@ def preprocess(sequences):
     """
     processed = []
     for i in sequences:
-        tmp = re.sub("[^ACTGNactgn-]", "N", str(i))
+        tmp = re.sub("[^ACTGNactgn-]", "N", str(i).replace('U', 'T'))
         processed.append(tmp)
     return processed
-
 
 def score_of(curr_clm: dict, matchS, mismatchS, gap1S, gap2S):
     """
@@ -65,7 +64,7 @@ def score_of(curr_clm: dict, matchS, mismatchS, gap1S, gap2S):
     match = 0  # nongap==nongap
     mismatch = 0  # nongap!=nongap
     gap1 = 0  # gap-nongap
-    gap2 = 0  # gap-gap
+    gap2 = 0
     A, C, G, T, N, dash = curr_clm['A'], curr_clm['C'], curr_clm['G'], curr_clm['T'], curr_clm['N'], curr_clm['-']
     match = (A * (A - 1) + C * (C - 1) + G * (G - 1) + T * (T - 1)) // 2
     mismatch = ((A + C) * (G + T)) + A * C + G * T
