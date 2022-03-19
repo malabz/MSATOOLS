@@ -1,4 +1,0 @@
-deal_N_tool filter=lfs diff=lfs merge=lfs -text
-dotplot filter=lfs diff=lfs merge=lfs -text
-preprocess filter=lfs diff=lfs merge=lfs -text
-accuracy filter=lfs diff=lfs merge=lfs -text
