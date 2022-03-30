@@ -10,13 +10,13 @@ perl small_variation_simulation_splice.pl [options]
 
 ```
 Options: 
-         -s INT   	 Number of samples
-         -l INT   	 Number of bases in each genome
-				 -sub INT    Number of substitution sites in the alignment
-				 -ins INT    Number of insertion sites in the alignment
-				 -del INT    Number of deletion sites in the alignment
-         -o STR   	 Output file name
-         -h       	 this help message
+         -s INT      Number of samples
+         -l INT      Number of bases in each genome
+	 -sub INT    Number of substitution sites in the alignment
+	 -ins INT    Number of insertion sites in the alignment
+	 -del INT    Number of deletion sites in the alignment
+         -o STR      Output file name
+         -h          this help message
 
 ```
 
