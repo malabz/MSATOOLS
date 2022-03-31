@@ -12,7 +12,7 @@ The results:
 - Scaled SP score: we divided the Avg SP score by the sequences length L.
 ## Usage
 ```bash
-python SP.py [-h] --input INPUT [--match MATCH] [--mismatch MISMATCH] [--gap1 GAP1] [--gap2 GAP2]
+python SPscore.py [-h] --input INPUT [--match MATCH] [--mismatch MISMATCH] [--gap1 GAP1] [--gap2 GAP2]
 
 optional arguments:
   -h, --help           show this help message and exit
