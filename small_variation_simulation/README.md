@@ -2,10 +2,10 @@
 
 This script for creating a simulated multi-FASTA alignment file is adopted by [Fenglong Yang](http://lab.malab.cn/~yangfl/) from the script shared by [SNP-sites](https://github.com/sanger-pathogens/snp-sites). The DNA center sequences were simulated randomly with 25% of A, C, T and G. 
 
-Download <a href="http://lab.malab.cn/~tfr/" download="small_variation_simulation_splice.pl">small_variation_simulation_splice.pl</a> 
+Download <a href="http://lab.malab.cn/%7Etfr/HAlign3_testdata/small_variation_simulation_splice.pl" download="small_variation_simulation_splice.pl">small_variation_simulation_splice.pl</a> 
 ```
-wget http://lab.malab.cn/~tfr/
-
+wget http://lab.malab.cn/%7Etfr/HAlign3_testdata/small_variation_simulation_splice.pl
+```
 Usage:
 
 ```
