@@ -1,0 +1,5 @@
+dotplot filter=lfs diff=lfs merge=lfs -text
+preprocess filter=lfs diff=lfs merge=lfs -text
+small_variation_simulation filter=lfs diff=lfs merge=lfs -text
+SPscore filter=lfs diff=lfs merge=lfs -text
+deal_N_tool filter=lfs diff=lfs merge=lfs -text
