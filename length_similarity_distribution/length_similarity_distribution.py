@@ -1,3 +1,4 @@
+#encoding: utf-8
 import sys
 from itertools import combinations
 import os
@@ -111,7 +112,7 @@ def del_file(filepath):
     """
     try:
         del_list = os.listdir(filepath)
-    except: 
+    except:
         os.remove(filepath)
         return
     for f in del_list:
@@ -121,7 +122,7 @@ def del_file(filepath):
         elif os.path.isdir(file_path):
             shutil.rmtree(file_path)
 
-def dispatch_program(tempdir: str, i: int, j: int, idsi: str, idsj: str, seqi: str, seqj: str) -> float: 
+def dispatch_program(tempdir: str, i: int, j: int, idsi: str, idsj: str, seqi: str, seqj: str) -> float:
     """
     将多序列计算距离的程序采用多线程完成
     :param i: 序列1编号
@@ -155,7 +156,14 @@ def dispatch_program(tempdir: str, i: int, j: int, idsi: str, idsj: str, seqi: s
 
 if __name__ == "__main__":
     if len(sys.argv) < 5 or sys.argv[1] == "help":
-        print("usage: python", sys.argv[0], "file_name", "mafft_path", 'dataset_name', "mafft_threads")
+        print("usage: python", sys.argv[0], "inputfile_name", "mafft_path", 'output_prefix', "mafft_threads")
+        print(" ")
+        print("positional arguments:")
+        print("  inputfile_name    specify the input file")
+        print("  mafft_path        the path of executable file of mafft aligner")
+        print("  output_prefix     specify the prefix of output files")
+        print("  mafft_threads     multi-thread for running mafft alignment")
+        print(" ")
         print("print this help information:", sys.argv[0], "help")
         exit(0)
     seqLengthDistribution(sys.argv[1], sys.argv[3])
@@ -221,6 +229,3 @@ if __name__ == "__main__":
         fout.write("\n")
         fout.write("Cost time: "+ str(end-start))
         fout.write("\n")
-
-
-
