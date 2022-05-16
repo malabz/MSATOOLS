@@ -1,8 +1,10 @@
 # length and similarity distribution of dataset
 ## Introduction
+
 This python script is used for visualize the distributions of length and similarity given a sequence dataset in FASTA format.
 The length is the number of characters of each sequence. The number of length value equals is the number of sequences (n) in dataset.
 The similarity between any two sequences is percentage of matched characters to in their pairwise alignment performed by aligner mafft. The number of similarity value equals n(n-1)/2. n is the number of sequences in dataset.
+
 The results:
 •	output_prefix_Distri.png: the visualization of length distribution.
 •	similarity_output_prefix.png: the visualization of similarity distribution.
