@@ -12,15 +12,13 @@ The results:
 - Scaled SP score: we divided the Avg SP score by the sequences length L.
 ## Usage
 ```bash
-python length_similarity_distribution.py [-h] --input INPUT [--match MATCH] [--mismatch MISMATCH] [--gap1 GAP1] [--gap2 GAP2]
-
-optional arguments:
-  -h, --help           show this help message and exit
-  --input INPUT        Fasta file path to be scored.
-  --match MATCH        match score, default=1.
-  --mismatch MISMATCH  mismatch score, default=-1.
-  --gap1 GAP1          gap-base score, default=-2.
-  --gap2 GAP2          gap-gap score, default=0.
+usage: python length_similarity_distribution.py inputfile_name mafft_path output_prefix mafft_threads
+ 
+options:
+    inputfile_name: specify the input file
+        mafft_path: the path of executable file of mafft aligner
+     output_prefix: specify the prefix of output files
+     mafft_threads: multi-thread for running mafft alignment
 ```
 
 
