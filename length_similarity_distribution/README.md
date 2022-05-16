@@ -6,17 +6,12 @@ The length is the number of characters of each sequence. The number of length va
 The similarity between any two sequences is percentage of matched characters to in their pairwise alignment performed by aligner mafft. The number of similarity value equals n(n-1)/2. n is the number of sequences in dataset.
 
 The results:
-•	output_prefix_Distri.png: the visualization of length distribution.
-•	similarity_output_prefix.png: the visualization of similarity distribution.
-•	output_prefix.txt: the statistics of all sequence length in input dataset.
-•	similarity_output_prefix.txt: n(n-1)/2 similarity values between any two sequences
-•	output_prefix_time.txt: the running time spent by this script.
+-	output_prefix_Distri.png: the visualization of length distribution.
+-	similarity_output_prefix.png: the visualization of similarity distribution.
+-	output_prefix.txt: the statistics of all sequence length in input dataset.
+-	similarity_output_prefix.txt: n(n-1)/2 similarity values between any two sequences
+-	output_prefix_time.txt: the running time spent by this script.
 
-
-The results:
-- SP score: the sum of pair score
-- Avg SP score: we divided the SP score by the pair number N * (N – 1) / 2, where N represents the number of sequences.
-- Scaled SP score: we divided the Avg SP score by the sequences length L.
 ## Usage
 ```bash
 usage: python length_similarity_distribution.py inputfile_name mafft_path output_prefix mafft_threads
