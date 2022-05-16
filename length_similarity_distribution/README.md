@@ -1,10 +1,15 @@
 # length and similarity distribution of dataset
 ## Introduction
-Used to calculate the SP value of the result of multiple sequence alignment.
+This python script is used for visualize the distributions of length and similarity given a sequence dataset in FASTA format.
+The length is the number of characters of each sequence. The number of length value equals is the number of sequences (n) in dataset.
+The similarity between any two sequences is percentage of matched characters to in their pairwise alignment performed by aligner mafft. The number of similarity value equals n(n-1)/2. n is the number of sequences in dataset.
+The results:
+•	output_prefix_Distri.png: the visualization of length distribution.
+•	similarity_output_prefix.png: the visualization of similarity distribution.
+•	output_prefix.txt: the statistics of all sequence length in input dataset.
+•	similarity_output_prefix.txt: n(n-1)/2 similarity values between any two sequences
+•	output_prefix_time.txt: the running time spent by this script.
 
-The script automatically replaces the base "U" with "T" in the RNA sequence files and handles illegal characters (characters other than ATCG-) in the file. The solution is to replace illegal characters with "N". **It could only be used to nucleotide sequences.**
-
-By default, pairs with the same nongap characters(match) receive one count, pairs with different nongap characters(mismatch) receive minus one, pairs with one gap(gap1) receive minus two, and pairs with two gaps or consisting of an N and a character(ACTGN) receive zero. **Support user-defined parameters.**
 
 The results:
 - SP score: the sum of pair score
