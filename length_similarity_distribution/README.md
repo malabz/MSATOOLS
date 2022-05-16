@@ -14,11 +14,12 @@ The results:
 ```bash
 usage: python length_similarity_distribution.py inputfile_name mafft_path output_prefix mafft_threads
  
-options:
-    inputfile_name: specify the input file
-        mafft_path: the path of executable file of mafft aligner
-     output_prefix: specify the prefix of output files
-     mafft_threads: multi-thread for running mafft alignment
+positional arguments:
+  inputfile_name    specify the input file
+  mafft_path        the path of executable file of mafft aligner
+  output_prefix     specify the prefix of output files
+  mafft_threads     multi-thread for running mafft alignment
+ 
 ```
 
 
