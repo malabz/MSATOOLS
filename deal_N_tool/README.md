@@ -35,14 +35,12 @@
 -h 可以打开帮助
 ```
 
+## Build
+
+g++ deal_N.cpp -o deal_N
+
 ## toN.py
 
 toN.py 可以把fasta文件中所有简并碱基都转成N，因为带N的序列数据大多软件可以处理，但带其他简并碱基的序列数据可能导致大多软件瘫痪。
 
 usage： python toN.py -i in.fasta -o out.fasta
-
-## Build
-
-g++
-
-
