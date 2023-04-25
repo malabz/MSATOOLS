@@ -50,7 +50,7 @@ vector<string> names;
 vector<size_t> lengths;
 size_t NUM=0;
 int NSCORE = 0;
-int d = 400, e = 30; //Ê×¸ögapºÍºóĞøgap
+int d = 400, e = 30; //é¦–ä¸ªgapå’Œåç»­gap
 int HOXD70[6][6] = 
 { {},
 	{0,91,-114,-31,-123,NSCORE},
@@ -62,7 +62,7 @@ int HOXD70[6][6] =
 int cs[8] = { 0,91,100,100,91,0,0,0 };
 bool* gap_tag;
 
-unsigned char* _get_map() //Í³Ò»DNA/RNA ¼°´óĞ¡Ğ´
+unsigned char* _get_map() //ç»Ÿä¸€DNA/RNA åŠå¤§å°å†™
 {
 	static unsigned char map[std::numeric_limits<unsigned char>::max()];
 	memset(map, 10, sizeof(map));
@@ -80,13 +80,13 @@ unsigned char* _get_map() //Í³Ò»DNA/RNA ¼°´óĞ¡Ğ´
 
 static const unsigned char* _map = _get_map();
 
-unsigned char M(unsigned char ch)  //Ô¤´¦Àí£¬char->int
+unsigned char M(unsigned char ch)  //é¢„å¤„ç†ï¼Œchar->int
 {
 	return _map[ch];
 }
 
 template<typename Representation, typename Period>
-std::ostream& operator<<(std::ostream& os, std::chrono::duration<Representation, Period> duration) //Ê±¼äÏûºÄ
+std::ostream& operator<<(std::ostream& os, std::chrono::duration<Representation, Period> duration) //æ—¶é—´æ¶ˆè€—
 {
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << " ms";
 	return os;
@@ -296,9 +296,9 @@ void get_score(block& Block)
 }
 
 int main(int argc, char* argv[]) {
-	const auto align_start = std::chrono::high_resolution_clock::now(); //¼ÇÂ¼¿ªÊ¼Ê±¼ä
-	string in_file_name;// = "C:/Users/ÖÜÍ¨/Desktop/parsnp.xmfa";
-	string out_file_name;// = "C:/Users/ÖÜÍ¨/Desktop/parsnp.maf";
+	const auto align_start = std::chrono::high_resolution_clock::now(); //è®°å½•å¼€å§‹æ—¶é—´
+	string in_file_name;// = "C:/Users/å‘¨é€š/Desktop/parsnp.xmfa";
+	string out_file_name;// = "C:/Users/å‘¨é€š/Desktop/parsnp.maf";
 
 	int zt = 0;
 	if (argc == 2)
@@ -332,7 +332,7 @@ int main(int argc, char* argv[]) {
 		exit(-1);
 	}
 
-	std::ifstream ifs(in_file_name, std::ios::binary | std::ios::in); //ÅĞ¶ÏÊäÈëÂ·¾¶ºÏ·¨·ñ
+	std::ifstream ifs(in_file_name, std::ios::binary | std::ios::in); //åˆ¤æ–­è¾“å…¥è·¯å¾„åˆæ³•å¦
 	if (!ifs)
 	{
 		std::cout << "cannot access file " << in_file_name << '\n';
@@ -355,7 +355,7 @@ int main(int argc, char* argv[]) {
 	len_num = to_string(len_num).size();
 	name_num++;
 
-	std::ofstream os(out_file_name, std::ios::binary | std::ios::out); //ÅĞ¶ÏÊä³öÂ·¾¶ºÏ·¨·ñ
+	std::ofstream os(out_file_name, std::ios::binary | std::ios::out); //åˆ¤æ–­è¾“å‡ºè·¯å¾„åˆæ³•å¦
 	if (!os)
 	{
 		std::cout << "cannot write file " << out_file_name << '\n';
@@ -380,7 +380,7 @@ int main(int argc, char* argv[]) {
 	}
 	ifs.close();
 	os.close();
-	std::cout << "Time consumes: " << (std::chrono::high_resolution_clock::now() - align_start) << '\n'; //Êä³ö±È¶ÔºÄ·ÑÊ±¼ä
-	std::cout << "Memory  usage: " << getPeakRSS() << " B\n";//Êä³öÄÚ´æºÄ·Ñ
+	std::cout << "Time consumes: " << (std::chrono::high_resolution_clock::now() - align_start) << '\n'; //è¾“å‡ºæ¯”å¯¹è€—è´¹æ—¶é—´
+	std::cout << "Memory  usage: " << getPeakRSS() << " B\n";//è¾“å‡ºå†…å­˜è€—è´¹
 	return 0;
 }
