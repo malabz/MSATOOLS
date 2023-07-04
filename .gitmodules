@@ -1,0 +1,3 @@
+[submodule "qscore"]
+	path = qscore
+	url = git@github.com:malabz/qscore.git
