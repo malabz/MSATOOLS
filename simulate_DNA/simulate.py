@@ -229,7 +229,7 @@ def generate_maf_fasta(input_file, out_maf_file, simulate_file, mutation_prob, m
             if not line.startswith('>'):
                 original_sequence += line.strip()
             else:
-                A_name = line[1].strip()
+                A_name = line[1:].strip()
     oLen = len(original_sequence)
     global flags
     flags = list(range(oLen))  # 初始化标志数组
@@ -393,7 +393,7 @@ def generate_maf_fasta_times(input_file, out_maf_file, simulate_file, mutation_t
             if not line.startswith('>'):
                 original_sequence += line.strip()
             else:
-                A_name = line[1].strip()
+                A_name = line[1:].strip()
     oLen = len(original_sequence)
     global flags
     flags = list(range(oLen))  # 初始化标志数组
