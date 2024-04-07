@@ -122,7 +122,7 @@ def del_file(filepath):
         elif os.path.isdir(file_path):
             shutil.rmtree(file_path)
 
-def dispatch_program(tempdir: str, i: int, j: int, idsi: str, idsj: str, seqi: str, seqj: str) -> float:
+def dispatch_program(tempdir: str, i: int, j: int, idsi: str, idsj: str, seqi: str, seqj: str, mafft_path: str) -> float:
     """
     将多序列计算距离的程序采用多线程完成
     :param i: 序列1编号
@@ -131,6 +131,7 @@ def dispatch_program(tempdir: str, i: int, j: int, idsi: str, idsj: str, seqi: s
            idsj: 序列2标识号
            seqi: 序列1内容
            seqj: 序列2内容
+           mafft_path: mafft路径
     :return: ans: 序列相似度
     """
     file_path = tempdir + os.sep + str(i) + "_" + str(j) + ".fasta"
@@ -146,7 +147,7 @@ def dispatch_program(tempdir: str, i: int, j: int, idsi: str, idsj: str, seqi: s
         fout.write("\n")
         fout.write(seqj)
     outfile_path = file_path + ".aligned"
-    os.system(mafft + " " + file_path + " > " + outfile_path + " 2> /dev/null")
+    os.system(mafft_path + " " + file_path + " > " + outfile_path + " 2> /dev/null")
     _, current_sequences = read_fasta(outfile_path)
     ans = compare(current_sequences[0], current_sequences[1])
     del_file(file_path)
@@ -185,7 +186,7 @@ if __name__ == "__main__":
     mypool = Pool(processes = threads)
     mafft_start = time.time()
     for i in records_index:
-        sub.append( mypool.apply_async( dispatch_program, ( tempdirname, i[0], i[1], ids[i[0]], ids[i[1]], sqs[i[0]], sqs[i[1]], ) ) )
+        sub.append( mypool.apply_async( dispatch_program, ( tempdirname, i[0], i[1], ids[i[0]], ids[i[1]], sqs[i[0]], sqs[i[1]], mafft) ) )
         if prei != i[0]:
             mypool.close()
             mypool.join()
