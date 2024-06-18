@@ -2,11 +2,14 @@
 
 Author:zhai1xiao
 Create Date:2021-12-06
-Update Date:2021-12-19
+Update Date:2024-06-18
+Modified by: wym6912
 
 """
 import re
 import argparse
+import multiprocessing
+
 
 
 def read_fasta(file_path):
@@ -73,6 +76,29 @@ def score_of(curr_clm: dict, matchS, mismatchS, gap1S, gap2S):
     score = (match * matchS) + (mismatch * mismatchS) + (gap1 * gap1S) + (gap2 * gap2S)
     return score
 
+def every_place_calc(lock, score_dict, place_start, place_end, seqs):
+    '''
+    每个位置计算
+
+    Args:
+        lock        进程锁
+        score_dict  结果写入的字典
+        place_start 起始位置
+        place_end   终止位置
+        seqs        序列总数
+    Return:
+        当前区域的 sp 值
+
+    '''
+    _score = 0.0
+    for place in range(place_start, place_end):
+        curr_clm: dict = {'A': 0, 'C': 0, 'G': 0, 'T': 0, 'N': 0, '-': 0}
+        for i in range(seqs):
+            curr_clm[sequences[i][place]] += 1
+        _score += score_of(curr_clm, matchScore, mismatchScore, gap1Score, gap2Score)
+    with lock:
+        score_dict['score'] += _score
+        print("Calculate range [{}, {}) done.".format(place_start, place_end))
 
 def evaluate(sequences, matchS, mismatchS, gap1S, gap2S):
     """
@@ -88,26 +114,59 @@ def evaluate(sequences, matchS, mismatchS, gap1S, gap2S):
     Return:
         sp score
     """
-    print("calculating", end="", flush=True)
-    score_list = []
+    print("calculating", flush=True)
+    score = 0.0
+    '''
     for j in range(len(sequences[0])):
         curr_clm: dict = {'A': 0, 'C': 0, 'G': 0, 'T': 0, 'N': 0, '-': 0}
         for i in range(len(sequences)):
             curr_clm[sequences[i][j]] += 1
-        score_list.append(score_of(curr_clm, matchS, mismatchS, gap1S, gap2S))
+        score += score_of(curr_clm, matchS, mismatchS, gap1S, gap2S)
         if (j + 1) % (len(sequences[0]) // 3) == 0: print('.', end="", flush=True)
+    '''
+    workers = 24
+    max_len = len(sequences[0])
+    if(workers != 1):
+        per = max_len // (workers - 1)
+        rg = [per * i for i in range(workers)]
+        rg.append(max_len)
+        seqs = len(sequences)
+        lock = multiprocessing.Lock()
+        with multiprocessing.Manager() as score:
+            score_dic = score.dict({'score': 0.0})
+            results = [multiprocessing.Process(target = every_place_calc, args = (lock, score_dic, rg[i], rg[i + 1], seqs, )) for i in range(len(rg) - 1)]
+            for _ in results:
+                _.start()
+            for _ in results:
+                _.join()
+            score = score_dic['score']
+    else:
+        per = max_len
+        for j in range(len(sequences[0])):
+            curr_clm: dict = {'A': 0, 'C': 0, 'G': 0, 'T': 0, 'N': 0, '-': 0}
+            for i in range(len(sequences)):
+                curr_clm[sequences[i][j]] += 1
+            score += score_of(curr_clm, matchS, mismatchS, gap1S, gap2S)
+            if (j + 1) % (len(sequences[0]) // 3) == 0: print('.', end="", flush=True)
     print("done")
-    return sum(score_list)
+    return score
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input', type=str, required=True, default='', help='Fasta file path to be scored.')
+    parser.add_argument('--input', type=str, required=False, default='output.aligned.fasta', help='Fasta file path to be scored.')
     parser.add_argument('--match', type=float, default=1, help='match score, default=1.')
     parser.add_argument('--mismatch', type=float, default=-1, help='mismatch score, default=-1.')
     parser.add_argument('--gap1', type=float, default=-2, help='gap-base score, default=-2.')
     parser.add_argument('--gap2', type=float, default=0, help='gap-gap score, default=0.')
+    parser.add_argument('--threads', type=int, default=1, help='program threads, default=1.')
     args = parser.parse_args()
+
+    global matchScore
+    global mismatchScore
+    global gap1Score
+    global gap2Score
+    global sequences
 
     filepath = args.input
     matchScore = args.match
@@ -115,11 +174,13 @@ if __name__ == '__main__':
     gap1Score = args.gap1
     gap2Score = args.gap2
 
+
     _, sequences = read_fasta(filepath)
     print(str(len(sequences)) + " sequences found")
     if len(sequences) <= 1: exit()
 
     processedSeq = preprocess(sequences)
+
 
     sp = evaluate(processedSeq, matchScore, mismatchScore, gap1Score, gap2Score)  # pure sp
     avgSp = sp / (len(sequences) * (len(sequences) - 1) // 2)  # avg sp
