@@ -124,7 +124,6 @@ def evaluate(sequences, matchS, mismatchS, gap1S, gap2S):
         score += score_of(curr_clm, matchS, mismatchS, gap1S, gap2S)
         if (j + 1) % (len(sequences[0]) // 3) == 0: print('.', end="", flush=True)
     '''
-    workers = 24
     max_len = len(sequences[0])
     if(workers != 1):
         per = max_len // (workers - 1)
@@ -167,12 +166,14 @@ if __name__ == '__main__':
     global gap1Score
     global gap2Score
     global sequences
+    global workers
 
     filepath = args.input
     matchScore = args.match
     mismatchScore = args.mismatch
     gap1Score = args.gap1
     gap2Score = args.gap2
+    workers = args.threads
 
 
     _, sequences = read_fasta(filepath)
