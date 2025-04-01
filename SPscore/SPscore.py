@@ -2,7 +2,7 @@
 
 Author:zhai1xiao
 Create Date:2021-12-06
-Update Date:2024-06-18
+Update Date:2025-03-31
 Modified by: wym6912
 
 """
@@ -46,7 +46,7 @@ def preprocess(sequences):
     """
     processed = []
     for i in sequences:
-        tmp = re.sub("[^ACTGNactgn-]", "N", str(i).replace('U', 'T'))
+        tmp = re.sub("[^ACTGNUactgnu-]", "N", str(i).replace('U', 'T'))
         processed.append(tmp)
     return processed
 
@@ -180,10 +180,10 @@ if __name__ == '__main__':
     print(str(len(sequences)) + " sequences found")
     if len(sequences) <= 1: exit()
 
-    processedSeq = preprocess(sequences)
+    sequences = preprocess(sequences)
 
 
-    sp = evaluate(processedSeq, matchScore, mismatchScore, gap1Score, gap2Score)  # pure sp
+    sp = evaluate(sequences, matchScore, mismatchScore, gap1Score, gap2Score)  # pure sp
     avgSp = sp / (len(sequences) * (len(sequences) - 1) // 2)  # avg sp
     scaledSP = avgSp / len(sequences[0])  # scaled sp
     print("SP score: " + str(sp))
